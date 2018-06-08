@@ -20,6 +20,7 @@ class Engine:
             self.maximise(board, self.searchDepth, True)
         else:
             self.minimise(board, self.searchDepth, True)
+        return self.bestMove
     
     
     def maximise(self, board, depth, rootNode):
@@ -53,6 +54,5 @@ class Engine:
 
 
 if __name__ == "__main__":
-    e = Engine(optimal, 9)
-    e.minimax(initialBoard, players[0])
-    print e.bestMove
+    e = Engine(optimal, 2)
+    pretty_print(e.minimax(initialBoard, players[0]))

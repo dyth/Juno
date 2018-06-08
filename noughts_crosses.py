@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """player, winning and move conditions for noughts and crosses"""
 import copy
+from random import uniform
 
 
 # game information
@@ -51,6 +52,28 @@ def evaluate(board):
             return 0.0
 
 
+def pretty_print(board):
+    printBoard = []
+    for i in range(9):
+        if board[i] == players[0]:
+            printBoard.append("X")
+        elif board[i] == players[1]:
+            printBoard.append("O")
+        else:
+            printBoard.append(" ")
+    print """
+   |   |
+ %s | %s | %s
+___|___|___
+   |   |
+ %s | %s | %s
+___|___|___
+   |   |
+ %s | %s | %s
+   |   |
+""" % tuple(printBoard)
+
+    
 def optimal(board):
     'optimal policy'
     winner = [7, 56, 73, 84, 146, 273, 292, 448]
@@ -61,3 +84,8 @@ def optimal(board):
         if state in winner:
             return float(player)
     return 0.0
+
+
+def random(board):
+    'policy which selects a move at random'
+    return uniform(1, 10)
