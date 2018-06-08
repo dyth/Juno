@@ -43,13 +43,14 @@ class value_node:
 class fast_node:
     'a node in a list tree. Faster than the above because no probability'
 
-    def __init__(self, player, board):
+    def __init__(self, player, board, evaluate):
         'initialise new node with a board'
         
         # set conditions
         self.board = board
         self.player = player
-        self.winner = evaluate(board)
+        self.evaluate = evaluate
+        self.winner = self.evaluate(board)
         self.moves = []
         
         # if no winner and a move exist, swap the players and do all possible
@@ -59,6 +60,6 @@ class fast_node:
             for m in move_all(self.next, self.board):
                 # if no possible move, append None to list of moves
                 if m != None:
-                    self.moves.append(fast_node(self.next, m))
+                    self.moves.append(fast_node(self.next, m, evaluate))
                 else:
                     self.moves.append(None)

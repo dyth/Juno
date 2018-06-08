@@ -5,7 +5,7 @@ import copy
 
 # game information
 initialBoard = [None, None, None, None, None, None, None, None, None]
-players = [0, 1]
+players = [-1, 1]
 
 
 
@@ -47,3 +47,5 @@ def evaluate(board):
             state += (int(board[i] == player) << i)
         if state in winner:
             return player
+        else:
+            return 0
