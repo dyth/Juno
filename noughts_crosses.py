@@ -5,7 +5,7 @@ import copy
 
 # game information
 initialBoard = [None, None, None, None, None, None, None, None, None]
-players = [-1, 1]
+players = [1, -1]
 
 
 
@@ -46,6 +46,18 @@ def evaluate(board):
         for i in range(9):
             state += (int(board[i] == player) << i)
         if state in winner:
-            return player
-        else:
-            return 0
+            return float(player)
+        elif None not in board:
+            return 0.0
+
+
+def optimal(board):
+    'optimal policy'
+    winner = [7, 56, 73, 84, 146, 273, 292, 448]
+    for player in players:
+        state = 0
+        for i in range(9):
+            state += (int(board[i] == player) << i)
+        if state in winner:
+            return float(player)
+    return 0.0
