@@ -3,6 +3,7 @@
 engine utilises a function policy to choose the best move using minimax
 """
 from noughts_crosses import *
+from node import *
 
 
 class Engine:
@@ -12,49 +13,69 @@ class Engine:
         # searchDepth : int
         self.policy = policy
         self.searchDepth = searchDepth
-        self.bestMove = None
 
 
-    def minimax(self, board, player):
-        'find self.bestMove using minimax to searchDepth'
-        self.bestMove = None
+    def create_search_tree(self, board, player):
+        'create search tree from board'
+        node = Node(board)
         if player == players[0]:
-            self.maximise(board, self.searchDepth, True)
+            self.maximise(node, self.searchDepth, True)
         else:
-            self.minimise(board, self.searchDepth, True)
-        return self.bestMove
+            self.minimise(node, self.searchDepth, True)
+        return node
+
+    
+    def minimax(self, board, player):
+        'find self.bestMove using minimax and principal variation'
+        return self.create_search_tree(board, player).pv.board
     
     
-    def maximise(self, board, depth, rootNode):
+    def maximise(self, node, depth, rootNode):
         'maximise policy score for players[0]'
-        if (depth == 0) or (evaluate(board) is not None):
-            return self.policy(board)
-        moves = move_all(players[0], board)
+        if node.reward is not None:
+            return node.reward
+        if depth == 0:
+            return self.policy(node.board)
+        moves = move_all(players[0], node.board)
         score = -2.0
         for m in moves:
-            newScore = self.minimise(m, depth-1, False)
+            daughter = Node(m)
+            newScore = self.minimise(daughter, depth-1, False)
             if (newScore > score):
+                if node.pv is not None:
+                    node.other.append(node.pv)
                 score = newScore
-                if rootNode:
-                    self.bestMove = m
+                node.pv = daughter
+            else:
+                node.other.append(daughter)
         return score
-                
     
-    def minimise(self, board, depth, rootNode):
+    
+    def minimise(self, node, depth, rootNode):
         'minimise policy score for players[1]'
-        if (depth == 0) or (evaluate(board) is not None):
-            return self.policy(board)
-        moves = move_all(players[1], board)
+        if node.reward is not None:
+            return node.reward
+        if depth == 0:
+            return self.policy(node.board)
+        moves = move_all(players[1], node.board)
         score = 2.0
         for m in moves:
-            newScore = self.maximise(m, depth-1, False)
+            daughter = Node(m)
+            newScore = self.maximise(daughter, depth-1, False)
             if (newScore < score):
+                if node.pv is not None:
+                    node.other.append(node.pv)
                 score = newScore
-                if rootNode:
-                    self.bestMove = m
+                node.pv = daughter
+            else:
+                node.other.append(daughter)
         return score
 
 
 if __name__ == "__main__":
-    e = Engine(optimal, 2)
-    pretty_print(e.minimax(initialBoard, players[0]))
+    e = Engine(optimal, 9)
+    tree = e.create_search_tree(initialBoard, players[0])
+    assert(len(tree.other) == 8)
+    pretty_print(tree.pv.board)
+
+

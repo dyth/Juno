@@ -20,9 +20,7 @@ class ValueNet(nn.Module):
         'initialise all the layers and activation functions needed'
         super(ValueNet, self).__init__()
 
-        self.DISCOUNT_RATE = 0.7
-        self.LEARNING_RATE = 0.0001
-        self.MSELoss = torch.nn.MSELoss(size_average=False)
+        self.weightsNum = 0
         
         # three layers
         self.fc1 = nn.Linear(9, 64)
@@ -54,3 +52,15 @@ class ValueNet(nn.Module):
         out = self.fc3(out)
         out = F.tanh(out)
         return out.data[0]
+
+
+    def load_weights(self):
+        'load name'
+        self.load_state_dict(torch.load("weights.h5"))
+    
+    
+    def save_weights(self, directory):
+        'save the weights as the number in directory/'
+        self.weightsNum += 1
+        name = directory + "/" +  str(self.weightsNum) + ".h5"
+        torch.save(self.state_dict(), name)

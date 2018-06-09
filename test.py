@@ -1,13 +1,15 @@
 #!/usr/bin/env python
-"""play noughts and crosses against a random agent or human opposition"""
+"""
+play noughts and crosses against a random agent or human opposition
+"""
 from engine import *
 from value_network import *
 from noughts_crosses import *
 
 
-class user:
+class User:
 
-    def pretty_print(self, board):
+    def query_print(self, board):
         printBoard = []
         for i in range(9):
             if board[i] == players[0]:
@@ -27,9 +29,10 @@ ___|___|___
  %s | %s | %s
    |   |
 """ % tuple(printBoard)
+
     
     def minimax(self, board, player):
-        self.pretty_print(board)
+        self.query_print(board)
         index = input("Type the number of the square to move ")
         board[index-1] = player
         return board
@@ -50,8 +53,8 @@ def self_play(engines):
 if __name__ == "__main__":
     e = Engine(optimal, 9)
     #ran = Engine(random, 1)
-    u = user()
-    self_play([u, e])
+    u = User()
+    self_play([e, e])
     #print e.minimax(initialBoard, players[0])
     #v = ValueNet()
     #e = Engine(v, 2)
