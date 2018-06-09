@@ -52,11 +52,6 @@ def self_play(engines):
 
 if __name__ == "__main__":
     e = Engine(optimal, 9)
-    #ran = Engine(random, 1)
     u = User()
-    self_play([e, e])
-    #print e.minimax(initialBoard, players[0])
-    #v = ValueNet()
-    #e = Engine(v, 2)
-    #pretty_print(e.minimax(initialBoard, players[0]))
+    self_play([e, u])
     
