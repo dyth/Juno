@@ -37,20 +37,20 @@ class ValueNet(nn.Module):
             
     def list_to_Variable(self, inputLayer):
         'convert a list to Variable for use in PyTorch'
+        inputLayer = [0 if iL == None else iL for iL in inputLayer]
         inputLayer = torch.FloatTensor(np.array(inputLayer))
         if self.gpu:
             inputLayer = inputLayer.cuda()
         return Variable(inputLayer)
-            
-
+    
+    
     def forward(self, inputLayer):
         'forward pass using Variable inputLayer'
+        inputLayer = self.list_to_Variable(inputLayer)
         out = self.fc1(inputLayer)
         out = F.relu(out)
         out = self.fc2(out)
         out = F.relu(out)
         out = self.fc3(out)
         out = F.tanh(out)
-        return out#.data[0]
-
-
+        return out.data[0]
