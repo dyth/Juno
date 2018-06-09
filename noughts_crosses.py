@@ -40,18 +40,28 @@ def move_all(player, board):
             moves.append(moved)
     return moves
 
-    
+
+
 def evaluate(board):
-    'evaluate if there is a winner in the board'
-    winner = [7, 56, 73, 84, 146, 273, 292, 448]
-    for player in players:
-        state = 0
-        for i in range(9):
-            state += (int(board[i] == player) << i)
-        if state in winner:
-            return float(player)
-        elif None not in board:
-            return 0.0
+    'evaluate whether there are still possible moves to be played'
+    if (board[0] == board[1] == board[2]) and (board[0] is not None):
+        return float(board[0])
+    elif (board[0] == board[3] == board[6]) and (board[0] is not None):
+        return float(board[0])
+    elif (board[0] == board[4] == board[8]) and (board[0] is not None):
+        return float(board[0])
+    elif (board[1] == board[4] == board[7]) and (board[1] is not None):
+        return float(board[1])
+    elif (board[3] == board[4] == board[5]) and (board[3] is not None):
+        return float(board[3])
+    elif (board[6] == board[7] == board[8]) and (board[6] is not None):
+        return float(board[6])
+    elif (board[2] == board[5] == board[8]) and (board[2] is not None):
+        return float(board[2])
+    elif (board[2] == board[4] == board[6]) and (board[2] is not None):
+        return float(board[2])
+    elif None not in board:
+        return 0.0
 
 
 def pretty_print(board):
@@ -78,16 +88,28 @@ ___|___|___
     
 def optimal(board):
     'optimal policy'
-    winner = [7, 56, 73, 84, 146, 273, 292, 448]
-    for player in players:
-        state = 0
-        for i in range(9):
-            state += (int(board[i] == player) << i)
-        if state in winner:
-            return float(player)
-    return 0.0
-
+    if (board[0] == board[1] == board[2]) and (board[0] is not None):
+        return float(board[0])
+    elif (board[0] == board[3] == board[6]) and (board[0] is not None):
+        return float(board[0])
+    elif (board[0] == board[4] == board[8]) and (board[0] is not None):
+        return float(board[0])
+    elif (board[1] == board[4] == board[7]) and (board[1] is not None):
+        return float(board[1])
+    elif (board[3] == board[4] == board[5]) and (board[3] is not None):
+        return float(board[3])
+    elif (board[6] == board[7] == board[8]) and (board[6] is not None):
+        return float(board[6])
+    elif (board[2] == board[5] == board[8]) and (board[2] is not None):
+        return float(board[2])
+    elif (board[2] == board[4] == board[6]) and (board[2] is not None):
+        return float(board[2])
+    else:
+        return 0.0
 
 def random(board):
     'policy which selects a move at random'
     return uniform(1, 10)
+
+
+print optimal([-1, 1, -1, None, -1, 1, -1, None, None])
