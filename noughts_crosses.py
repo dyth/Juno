@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-"""player, winning and move conditions for noughts and crosses"""
+"""
+player, winning and move conditions for noughts and crosses
+"""
 import copy
 from random import uniform
 

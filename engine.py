@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-"""engine utilises a function policy to choose the best move using minimax"""
+"""
+engine utilises a function policy to choose the best move using minimax
+"""
 from noughts_crosses import *
 
 
