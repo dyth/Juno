@@ -14,12 +14,14 @@ def self_play(engines):
         board = engines[index].minimax(board, player)
         player = next_player(player)
         index = int(not index)
+        pretty_print(board)
     return player
 
 
 if __name__ == "__main__":
     e = Engine(optimal, 9)
-    self_play([e, e])
+    ran = Engine(random, 1)
+    self_play([e, ran])
     #print e.minimax(initialBoard, players[0])
     #v = ValueNet()
     #e = Engine(v, 2)

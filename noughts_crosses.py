@@ -107,9 +107,7 @@ def optimal(board):
     else:
         return 0.0
 
+
 def random(board):
     'policy which selects a move at random'
-    return uniform(1, 10)
-
-
-print optimal([-1, 1, -1, None, -1, 1, -1, None, None])
+    return uniform(-1, 1)
