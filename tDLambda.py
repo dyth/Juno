@@ -26,7 +26,7 @@ def create_train_sequence(engines):
     return trace
 
 
-def TD_lambda(engines):
+def TD_Lambda(engines):
     'return sequence of boards and reward for training'
     trace = create_train_sequence(engines)
     boards = [t.board for t in trace]
@@ -34,9 +34,9 @@ def TD_lambda(engines):
     return boards, reward
         
 
-
-e = Engine(optimal, 9)
-boards, reward = TD_lambda([e, e])
-for b in boards:
-    print b
-print reward
+if __name__ == "__main__":
+    e = Engine(optimal, 9)
+    boards, reward = TD_Lambda([e, e])
+    for b in boards:
+        print b
+    print reward
