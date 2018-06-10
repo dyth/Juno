@@ -36,7 +36,7 @@ ___|___|___
         index = input("Type the number of the square to move ")
         board[index-1] = player
         return board
-
+    
 
 def self_play(engines):
     'engines is a list of engines and engines[0] moves first'
@@ -47,7 +47,7 @@ def self_play(engines):
         board = engines[index].minimax(board, player)
         player = next_player(player)
         index = int(not index)
-    return player
+    return evaluate(board)
 
 
 if __name__ == "__main__":
