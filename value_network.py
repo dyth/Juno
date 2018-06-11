@@ -95,7 +95,6 @@ class ValueNet(nn.Module):
                 p.data -= self.learningRate * t * g
 
 
-# from value_network import *
 # from noughts_crosses import *
 # v = ValueNet(0.5, 0.7)
 # v.temporal_difference([initialBoard], 1.0)

@@ -23,8 +23,6 @@ def TD_Leaf(engines, network):
 
 
 if __name__ == "__main__":
-    e = Engine(optimal, 9)
-    boards, reward = TD_Leaf([e, e])
-    for b in boards:
-        print b
-    print reward
+    valueNetwork = ValueNet(0.01, 0.7)
+    e = Engine(valueNetwork, 9)
+    TD_Leaf([e, e], valueNetwork)

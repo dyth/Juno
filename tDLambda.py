@@ -35,8 +35,9 @@ def TD_Lambda(engines, network):
         
 
 if __name__ == "__main__":
-    e = Engine(optimal, 9)
-    boards, reward = TD_Lambda([e, e])
+    valueNetwork = ValueNet(0.01, 0.7)
+    e = Engine(valueNetwork, 9)
+    boards, reward = TD_Lambda([e, e], valueNetwork)
     for b in boards:
         print b
     print reward
