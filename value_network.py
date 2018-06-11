@@ -35,13 +35,13 @@ class ValueNet(nn.Module):
             self.cuda()
 
             
-    def list_to_Variable(self, inputLayer):
+    def list_to_Variable(self, inputLayer, grad):
         'convert a list to Variable for use in PyTorch'
         inputLayer = [0 if iL == None else iL for iL in inputLayer]
         inputLayer = torch.FloatTensor(np.array(inputLayer))
         if self.gpu:
             inputLayer = inputLayer.cuda()
-        return Variable(inputLayer)
+        return Variable(inputLayer, requires_grad=grad)
     
 
     def forward_pass(self, inputLayer):
@@ -56,7 +56,7 @@ class ValueNet(nn.Module):
     
     def forward(self, inputLayer):
         'forward pass using Variable inputLayer'
-        inputLayer = self.list_to_Variable(inputLayer)
+        inputLayer = self.list_to_Variable(inputLayer, False)
         return self.forward_pass(inputLayer).data[0]
     
 
@@ -77,14 +77,25 @@ class ValueNet(nn.Module):
         traces, gradients, trace = [], [], 0.0
         # boards goes forward in time, so reverse index
         for i in range(len(boards)-1, -1, -1):
-            # forward pass
-            board = self.list_to_Variable(boards[i])
+            board = self.list_to_Variable(boards[i], True)
             value = self.forward_pass(board)
             # compute eligibility trace
-            trace = trace * self.decay + (lastValue - value)
+            trace = trace * self.decay + (lastValue - value.data[0])
             traces.append(trace)
-            lastValue = value
-            # autograd of gradient
+            # zero gradients and compute partial differential wrt parameters
+            for p in self.parameters():
+                if p.grad is not None:
+                    p.grad.data.zero_()
+            lastValue = value.data[0]
             value.backward()
-            gradients.append(b.grad)
-        
+            gradients.append([p.grad.data for p in self.parameters()])
+        # update the parameters of the network
+        for (t, grad) in zip(traces, gradients):
+            for (p, g) in zip(self.parameters(), grad):
+                p.data -= self.learningRate * t * g
+
+
+# from value_network import *
+# from noughts_crosses import *
+# v = ValueNet(0.5, 0.7)
+# v.temporal_difference([initialBoard], 1.0)

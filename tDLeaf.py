@@ -14,12 +14,12 @@ def get_leaf_pv(node):
         return node.board
 
 
-def TD_Leaf(engines):
+def TD_Leaf(engines, network):
     'return sequence of boards and reward for training'
     trace = create_train_sequence(engines)
     boards = [get_leaf_pv(t) for t in trace]
     reward = trace[-1].reward
-    return boards, reward
+    network.temporal_difference(boards, reward)
 
 
 if __name__ == "__main__":

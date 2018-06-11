@@ -26,12 +26,12 @@ def create_train_sequence(engines):
     return trace
 
 
-def TD_Lambda(engines):
+def TD_Lambda(engines, network):
     'return sequence of boards and reward for training'
     trace = create_train_sequence(engines)
     boards = [t.board for t in trace]
     reward = trace[-1].reward
-    return boards, reward
+    network.temporal_difference(boards, reward)
         
 
 if __name__ == "__main__":
