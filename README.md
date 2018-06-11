@@ -4,9 +4,4 @@ Juno is a Tic-Tac-Toe agent trained by Deep Reinforcement Learning. It is so nam
 
 ## Prerequisites
 * Python 2.7
-* Keras
 * PyTorch
-
-## Value Network
-
-1. Generate training data in the file `value_train.csv` by `python generate_value_training.py`
