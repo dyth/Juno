@@ -7,6 +7,7 @@ from node import *
 from play import *
 from value_network import *
 from noughts_crosses import *
+import matplotlib.pyplot as plt
 
 
 def create_train_sequence(engines):
@@ -42,22 +43,44 @@ def train(engine, games):
     
     
 if __name__ == "__main__":
-    valueNetwork = ValueNet(0.01, 0.7)
+    plt.ion()
+    valueNetwork = ValueNet(0.05, 0.7)
     e = Engine(valueNetwork, 3)
     r = Engine(random, 1)
     #TD_Lambda([e, e], valueNetwork)
+    win, lose, draw = [], [], []
+    testGamesNum = 50
     for _ in range(1000):
         train(e, 20)
-        win, lose, draw = 0, 0, 0
-        for i in range(50):
+        w, l, d = 0, 0, 0
+        
+        for i in range(testGamesNum):
             score = self_play([e, r])
             if score == 1:
-                win += 1
+                w += 1
             elif score == -1:
-                lose += 1
+                l += 1
             else:
-                draw += 1
-        print win, lose, draw, e.policy(initialBoard)
+                d += 1
+            score = self_play([r, e])
+            if score == -1:
+                w += 1
+            elif score == 1:
+                l += 1
+            else:
+                d += 1
+        w = float(w) / (2.0 * testGamesNum)
+        l = float(l) / (2.0 * testGamesNum)
+        d = float(d) / (2.0 * testGamesNum)
+        print w, l, d, e.policy(initialBoard)
+        win.append(w)
+        lose.append(l)
+        draw.append(d)
+        plt.plot(win)
+        plt.plot(lose)
+        plt.plot(draw)
+        plt.pause(0.001)
+        plt.clf()
 
 """
 e = Engine(optimal, 3)

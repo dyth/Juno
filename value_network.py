@@ -92,7 +92,7 @@ class ValueNet(nn.Module):
         # update the parameters of the network
         for (t, grad) in zip(traces, gradients):
             for (p, g) in zip(self.parameters(), grad):
-                p.data -= self.learningRate * t * g
+                p.data += self.learningRate * t * g
 
 
 # from noughts_crosses import *
