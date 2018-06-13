@@ -53,7 +53,7 @@ def self_play(engines):
 
 
 if __name__ == "__main__":
-    e = Engine(optimal, 9)
+    e = Engine(optimal, 9, 0.7)
     u = User()
     self_play([e, u])
     

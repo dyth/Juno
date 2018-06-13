@@ -8,11 +8,12 @@ from node import *
 
 class Engine:
 
-    def __init__(self, policy, searchDepth):
+    def __init__(self, policy, searchDepth, discount):
         # policy : fn board -> [-1.0, 1.0]'
         # searchDepth : int
         self.policy = policy
         self.searchDepth = searchDepth
+        self.discount = discount
 
 
     def create_search_tree(self, board, player):
@@ -46,7 +47,7 @@ class Engine:
                 node.pv = daughter
             else:
                 node.other.append(daughter)
-        return 0.7 * score
+        return self.discount * score
     
     
     def minimise(self, node, depth, rootNode):
@@ -65,11 +66,11 @@ class Engine:
                 node.pv = daughter
             else:
                 node.other.append(daughter)
-        return 0.7 * score
+        return self.discount * score
 
 
 if __name__ == "__main__":
-    e = Engine(optimal, 9)
+    e = Engine(optimal, 9, 0.7)
     tree = e.create_search_tree(initialBoard, players[0])
     assert(len(tree.other) == 8)
     pretty_print(tree.pv.board)

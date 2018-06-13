@@ -72,7 +72,7 @@ class ValueNet(nn.Module):
         torch.save(self.state_dict(), name)
 
     
-    def temporal_difference(self, boards, lastValue):
+    def temporal_difference(self, boards, lastValue, discount):
         'backup values according to boards'
         traces, gradients, trace = [], [], 0.0
         # boards goes forward in time, so reverse index
@@ -80,7 +80,8 @@ class ValueNet(nn.Module):
             board = self.list_to_Variable(boards[i], True)
             value = self.forward_pass(board)
             # compute eligibility trace
-            trace = trace * 0.7*self.decay + (0.7 * lastValue - value.data[0])
+            difference = discount * lastValue - value.data[0]
+            trace = trace * discount * self.decay + difference
             traces.append(trace)
             # zero gradients and compute partial differential wrt parameters
             for p in self.parameters():

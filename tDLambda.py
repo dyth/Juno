@@ -28,25 +28,25 @@ def create_train_sequence(engines):
     return trace
 
 
-def TD_Lambda(engines, network):
+def TD_Lambda(engines, network, discount):
     'return sequence of boards and reward for training'
     trace = create_train_sequence(engines)
     boards = [t.board for t in trace]
     reward = trace[-1].reward
-    network.temporal_difference(boards, reward)
+    network.temporal_difference(boards, reward, discount)
         
 
 def train(engine, games):
     'train engine for self play in games'
     for _ in range(games):
-        TD_Lambda([engine, engine], engine.policy)
+        TD_Lambda([engine, engine], engine.policy, engine.discount)
     
     
 if __name__ == "__main__":
     plt.ion()
-    valueNetwork = ValueNet(0.5, 0.7)
-    e = Engine(valueNetwork, 3)
-    r = Engine(random, 1)
+    valueNetwork = ValueNet(0.25, 0.7)
+    e = Engine(valueNetwork, 3, 0.7)
+    r = Engine(random, 1, 0.7)
     #TD_Lambda([e, e], valueNetwork)
     win, lose, draw = [], [], []
     testGamesNum = 50
