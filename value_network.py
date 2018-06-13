@@ -80,7 +80,7 @@ class ValueNet(nn.Module):
             board = self.list_to_Variable(boards[i], True)
             value = self.forward_pass(board)
             # compute eligibility trace
-            trace = trace * self.decay + (lastValue - value.data[0])
+            trace = trace * 0.7*self.decay + (0.7 * lastValue - value.data[0])
             traces.append(trace)
             # zero gradients and compute partial differential wrt parameters
             for p in self.parameters():

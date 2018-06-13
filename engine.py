@@ -46,7 +46,7 @@ class Engine:
                 node.pv = daughter
             else:
                 node.other.append(daughter)
-        return score
+        return 0.7 * score
     
     
     def minimise(self, node, depth, rootNode):
@@ -65,7 +65,7 @@ class Engine:
                 node.pv = daughter
             else:
                 node.other.append(daughter)
-        return score
+        return 0.7 * score
 
 
 if __name__ == "__main__":

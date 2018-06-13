@@ -44,7 +44,7 @@ def train(engine, games):
     
 if __name__ == "__main__":
     plt.ion()
-    valueNetwork = ValueNet(0.05, 0.7)
+    valueNetwork = ValueNet(0.5, 0.7)
     e = Engine(valueNetwork, 3)
     r = Engine(random, 1)
     #TD_Lambda([e, e], valueNetwork)
