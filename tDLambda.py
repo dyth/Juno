@@ -4,6 +4,7 @@ train value_network using the TD(lambda) reinforcement algorithm
 """
 from engine import *
 from node import *
+from play import *
 from value_network import *
 from noughts_crosses import *
 
@@ -34,7 +35,41 @@ def TD_Lambda(engines, network):
     network.temporal_difference(boards, reward)
         
 
+def train(engine, games):
+    'train engine for self play in games'
+    for _ in range(games):
+        TD_Lambda([engine, engine], engine.policy)
+    
+    
 if __name__ == "__main__":
     valueNetwork = ValueNet(0.01, 0.7)
-    e = Engine(valueNetwork, 9)
-    TD_Lambda([e, e], valueNetwork)
+    e = Engine(valueNetwork, 3)
+    r = Engine(random, 1)
+    #TD_Lambda([e, e], valueNetwork)
+    for _ in range(1000):
+        train(e, 20)
+        win, lose, draw = 0, 0, 0
+        for i in range(50):
+            score = self_play([e, r])
+            if score == 1:
+                win += 1
+            elif score == -1:
+                lose += 1
+            else:
+                draw += 1
+        print win, lose, draw, e.policy(initialBoard)
+
+"""
+e = Engine(optimal, 3)
+r = Engine(random, 1)
+win, lose, draw = 0, 0, 0
+for i in range(50):
+    score = self_play([e, r])
+    if score == 1:
+        win += 1
+    elif score == -1:
+        lose += 1
+    else:
+        draw += 1
+win, lose, draw
+"""

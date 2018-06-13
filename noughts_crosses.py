@@ -3,7 +3,8 @@
 player, winning and move conditions for noughts and crosses
 """
 import copy
-from random import uniform
+from random import uniform, seed
+seed(9001)
 
 
 # game information

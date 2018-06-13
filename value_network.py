@@ -25,9 +25,9 @@ class ValueNet(nn.Module):
         self.decay = decay
         
         # three layers
-        self.fc1 = nn.Linear(9, 64)
-        self.fc2 = nn.Linear(64, 9)
-        self.fc3 = nn.Linear(9, 1)
+        self.fc1 = nn.Linear(9, 16)
+        #self.fc2 = nn.Linear(64, 9)
+        self.fc3 = nn.Linear(16, 1)
 
         # if cuda, use GPU
         self.gpu = False #torch.cuda.is_available()
@@ -44,12 +44,12 @@ class ValueNet(nn.Module):
         return Variable(inputLayer, requires_grad=grad)
     
 
-    def forward_pass(self, inputLayer):
+    def forward_pass(self, out):
         'forward pass using Variable inputLayer'
-        out = self.fc1(inputLayer)
-        out = F.relu(out)
-        out = self.fc2(out)
-        out = F.relu(out)
+        out = self.fc1(out)
+        #out = F.relu(out)
+        #out = self.fc2(out)
+        #out = F.relu(out)
         out = self.fc3(out)
         return F.tanh(out)
     

@@ -47,6 +47,8 @@ def self_play(engines):
         board = engines[index].minimax(board, player)
         player = next_player(player)
         index = int(not index)
+        #print(board)
+        #pretty_print(board)
     return evaluate(board)
 
 
