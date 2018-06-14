@@ -27,8 +27,8 @@ class ValueNet(nn.Module):
         
         # three layers
         self.fc1 = nn.Linear(9, 128)
-        self.fc2 = nn.Linear(128, 1)
-        #self.fc3 = nn.Linear(9, 1)
+        self.fc2 = nn.Linear(128, 32)
+        self.fc3 = nn.Linear(32, 1)
 
         # if cuda, use GPU
         self.gpu = False #torch.cuda.is_available()
@@ -50,8 +50,8 @@ class ValueNet(nn.Module):
         out = self.fc1(out)
         out = F.relu(out)
         out = self.fc2(out)
-        #out = F.relu(out)
-        #out = self.fc3(out)
+        out = F.relu(out)
+        out = self.fc3(out)
         #out = F.dropout(out, training=self.training)
         return F.tanh(out)
     
