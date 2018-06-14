@@ -10,6 +10,7 @@ import numpy as np
 import torch
 torch.manual_seed(1729)
 np.random.seed(1729)
+import copy
 
 
 class ValueNet(nn.Module):
@@ -26,8 +27,8 @@ class ValueNet(nn.Module):
         
         # three layers
         self.fc1 = nn.Linear(9, 16)
-        #self.fc2 = nn.Linear(64, 9)
-        self.fc3 = nn.Linear(16, 1)
+        self.fc2 = nn.Linear(16, 1)
+        #self.fc3 = nn.Linear(9, 1)
 
         # if cuda, use GPU
         self.gpu = False #torch.cuda.is_available()
@@ -47,10 +48,11 @@ class ValueNet(nn.Module):
     def forward_pass(self, out):
         'forward pass using Variable inputLayer'
         out = self.fc1(out)
+        out = F.relu(out)
+        out = self.fc2(out)
         #out = F.relu(out)
-        #out = self.fc2(out)
-        #out = F.relu(out)
-        out = self.fc3(out)
+        #out = self.fc3(out)
+        #out = F.dropout(out, training=self.training)
         return F.tanh(out)
     
     
@@ -89,11 +91,16 @@ class ValueNet(nn.Module):
                     p.grad.data.zero_()
             lastValue = value.data[0]
             value.backward()
-            gradients.append([p.grad.data for p in self.parameters()])
+            grad = []
+            for p in self.parameters():
+                grad.append(copy.deepcopy(p.grad.data))
+            gradients.append(grad)
+            #print "gen", gradients[-1][0][0]
         # update the parameters of the network
         for (t, grad) in zip(traces, gradients):
             for (p, g) in zip(self.parameters(), grad):
                 p.data += self.learningRate * t * g
+            #print grad[0][0]
 
 
 # from noughts_crosses import *

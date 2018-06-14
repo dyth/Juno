@@ -13,8 +13,12 @@ import matplotlib.pyplot as plt
 def create_train_sequence(engines):
     'create a forest of nodes, their roots a new board position'
     board = initialBoard
+    
+    r = Engine(random, 1, discount)
+    board = r.minimax(board, players[0])
+    
     trace = []
-    player = players[0]
+    player = players[1]
     index = 0
     while evaluate(board) is None:
         node = engines[index].create_search_tree(board, player)
@@ -44,16 +48,16 @@ def train(engine, games):
     
 if __name__ == "__main__":
     plt.ion()
-    valueNetwork = ValueNet(0.25, 0.7)
-    e = Engine(valueNetwork, 3, 0.7)
-    r = Engine(random, 1, 0.7)
-    #TD_Lambda([e, e], valueNetwork)
+    learningRate = 0.5
+    discount = 0.7
+    valueNetwork = ValueNet(learningRate, 0.7)
+    e = Engine(valueNetwork, 3, discount)
+    r = Engine(random, 1, discount)
     win, lose, draw = [], [], []
-    testGamesNum = 50
+    testGamesNum = 10
     for _ in range(1000):
-        train(e, 20)
+        # plot first before train
         w, l, d = 0, 0, 0
-        
         for i in range(testGamesNum):
             score = self_play([e, r])
             if score == 1:
@@ -72,7 +76,7 @@ if __name__ == "__main__":
         w = float(w) / (2.0 * testGamesNum)
         l = float(l) / (2.0 * testGamesNum)
         d = float(d) / (2.0 * testGamesNum)
-        print w, l, d, e.policy(initialBoard)
+        print "Wins, Losses, Draws:", w, l, d, e.policy(initialBoard)
         win.append(w)
         lose.append(l)
         draw.append(d)
@@ -81,6 +85,9 @@ if __name__ == "__main__":
         plt.plot(draw)
         plt.pause(0.001)
         plt.clf()
+
+        # train
+        train(e, 20)
 
 """
 e = Engine(optimal, 3)
