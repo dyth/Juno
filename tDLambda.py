@@ -8,6 +8,7 @@ from play import *
 from value_network import *
 from noughts_crosses import *
 import matplotlib.pyplot as plt
+import csv
 
 
 def create_train_sequence(engines):
@@ -45,92 +46,94 @@ def train(engine, games):
     'train engine for self play in games'
     for _ in range(games):
         TD_Lambda([engine, engine], engine.policy, engine.discount)
-    
-    
+
+
 if __name__ == "__main__":
-    plt.ion()
-    learningRate = 0.01
-    discount = 0.7
-    directory = "tDLambda"
-    valueNetwork = ValueNet(learningRate, 0.7)
-    e = Engine(valueNetwork, 3, discount)
-    r = Engine(random, 1, discount)
-    win, lose, draw = [], [], []
-    testGamesNum = 10
-    for i in range(500):
-        # plot first before train
-        w, l, d = 0, 0, 0
-        for i in range(testGamesNum):
-            score = self_play([e, r])
-            if score == 1:
-                w += 1
-            elif score == -1:
-                l += 1
-            else:
-                d += 1
-            score = self_play([r, e])
-            if score == -1:
-                w += 1
-            elif score == 1:
-                l += 1
-            else:
-                d += 1
-        w = float(w) / (2.0 * testGamesNum)
-        l = float(l) / (2.0 * testGamesNum)
-        d = float(d) / (2.0 * testGamesNum)
-        print "Wins, Losses, Draws:", w, l, d, e.policy(initialBoard)
-        win.append(w)
-        lose.append(l)
-        draw.append(d)
-        plt.plot(win)
-        plt.plot(lose)
-        plt.plot(draw)
-        plt.pause(0.001)
-        plt.clf()
+    with open("tDLambda.csv", "wb") as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
+        
+        plt.ion()
+        learningRate = 0.01
+        discount = 0.7
+        directory = "tDLambda"
+        valueNetwork = ValueNet(learningRate, 0.7)
+        e = Engine(valueNetwork, 3, discount)
+        r = Engine(random, 1, discount)
+        win, lose, draw = [], [], []
+        testGamesNum = 10
+        for count in range(500):
+            # plot first before train
+            w, l, d = 0, 0, 0
+            for _ in range(testGamesNum):
+                score = self_play([e, r])
+                if score == 1:
+                    w += 1
+                elif score == -1:
+                    l += 1
+                else:
+                    d += 1
+                score = self_play([r, e])
+                if score == -1:
+                    w += 1
+                elif score == 1:
+                    l += 1
+                else:
+                    d += 1
+            w = float(w) / (2.0 * testGamesNum)
+            l = float(l) / (2.0 * testGamesNum)
+            d = float(d) / (2.0 * testGamesNum)
+            writer.writerow([w, l, d])
+            print "Wins, Losses, Draws:", w, l, d, e.policy(initialBoard)
+            win.append(w)
+            lose.append(l)
+            draw.append(d)
+            plt.plot(win)
+            plt.plot(lose)
+            plt.plot(draw)
+            plt.pause(0.001)
+            plt.clf()
 
-        # train
-        train(e, 20)
-        if i % 100 == 99:
-            e.policy.save_weights(directory)
+            # train
+            train(e, 20)
+            if (count % 100) == 99:
+                e.policy.save_weights(directory)
 
-    e.policy.learningRate = 0.001
-    i = 0
-    while True:
-        # plot first before train
-        w, l, d = 0, 0, 0
-        for i in range(testGamesNum):
-            score = self_play([e, r])
-            if score == 1:
-                w += 1
-            elif score == -1:
-                l += 1
-            else:
-                d += 1
-            score = self_play([r, e])
-            if score == -1:
-                w += 1
-            elif score == 1:
-                l += 1
-            else:
-                d += 1
-        w = float(w) / (2.0 * testGamesNum)
-        l = float(l) / (2.0 * testGamesNum)
-        d = float(d) / (2.0 * testGamesNum)
-        print "Wins, Losses, Draws:", w, l, d, e.policy(initialBoard)
-        win.append(w)
-        lose.append(l)
-        draw.append(d)
-        plt.plot(win)
-        plt.plot(lose)
-        plt.plot(draw)
-        plt.pause(0.001)
-        plt.clf()
+        e.policy.learningRate = 0.001
+        for count in range(1600):
+            # plot first before train
+            w, l, d = 0, 0, 0
+            for _ in range(testGamesNum):
+                score = self_play([e, r])
+                if score == 1:
+                    w += 1
+                elif score == -1:
+                    l += 1
+                else:
+                    d += 1
+                score = self_play([r, e])
+                if score == -1:
+                    w += 1
+                elif score == 1:
+                    l += 1
+                else:
+                    d += 1
+            w = float(w) / (2.0 * testGamesNum)
+            l = float(l) / (2.0 * testGamesNum)
+            d = float(d) / (2.0 * testGamesNum)
+            print "Wins, Losses, Draws:", w, l, d, e.policy(initialBoard)
+            win.append(w)
+            lose.append(l)
+            draw.append(d)
+            plt.plot(win)
+            plt.plot(lose)
+            plt.plot(draw)
+            plt.pause(0.001)
+            plt.clf()
 
-        # train
-        train(e, 20)
-        if i % 100 == 99:
-            e.policy.save_weights(directory)
-        i += 1
+            # train
+            train(e, 20)
+            if (count % 100) == 99:
+                e.policy.save_weights(directory)
 
 """
 e = Engine(optimal, 3)

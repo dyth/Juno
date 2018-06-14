@@ -71,6 +71,7 @@ class ValueNet(nn.Module):
         'save the weights as the number in "directory/"'
         self.weightsNum += 1
         name = directory + "/" +  str(self.weightsNum) + ".h5"
+        print name
         torch.save(self.state_dict(), name)
 
     
