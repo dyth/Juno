@@ -26,8 +26,8 @@ class ValueNet(nn.Module):
         self.decay = decay
         
         # three layers
-        self.fc1 = nn.Linear(9, 16)
-        self.fc2 = nn.Linear(16, 1)
+        self.fc1 = nn.Linear(9, 128)
+        self.fc2 = nn.Linear(128, 1)
         #self.fc3 = nn.Linear(9, 1)
 
         # if cuda, use GPU

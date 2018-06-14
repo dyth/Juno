@@ -13,12 +13,13 @@ import matplotlib.pyplot as plt
 def create_train_sequence(engines):
     'create a forest of nodes, their roots a new board position'
     board = initialBoard
+    player = players[0]
     
     r = Engine(random, 1, discount)
     board = r.minimax(board, players[0])
+    player = players[1]
     
     trace = []
-    player = players[1]
     index = 0
     while evaluate(board) is None:
         node = engines[index].create_search_tree(board, player)
@@ -48,7 +49,7 @@ def train(engine, games):
     
 if __name__ == "__main__":
     plt.ion()
-    learningRate = 0.5
+    learningRate = 0.01
     discount = 0.7
     valueNetwork = ValueNet(learningRate, 0.7)
     e = Engine(valueNetwork, 3, discount)
