@@ -53,6 +53,7 @@ if __name__ == "__main__":
         writer = csv.writer(csv_file, delimiter=',')
         
         plt.ion()
+        batch = 20
         learningRate = 0.01
         discount = 0.7
         directory = "tDLambda"
@@ -87,14 +88,19 @@ if __name__ == "__main__":
             win.append(w)
             lose.append(l)
             draw.append(d)
-            plt.plot(win)
-            plt.plot(lose)
-            plt.plot(draw)
+            x = range(0, batch*(count + 1), batch)
+            plt.plot(x, win, label="P(win)")
+            plt.plot(x, draw, label="P(draw)")
+            plt.plot(x, lose, label="P(lose)")
+            plt.legend()
+            plt.title("Training vs Time")
+            plt.xlabel('Self-Play Games Played')
+            plt.ylabel('Probability')
             plt.pause(0.001)
             plt.clf()
 
             # train
-            train(e, 20)
+            train(e, batch)
             if (count % 100) == 99:
                 e.policy.save_weights(directory)
 
@@ -120,32 +126,23 @@ if __name__ == "__main__":
             w = float(w) / (2.0 * testGamesNum)
             l = float(l) / (2.0 * testGamesNum)
             d = float(d) / (2.0 * testGamesNum)
+            writer.writerow([w, l, d])
             print "Wins, Losses, Draws:", w, l, d, e.policy(initialBoard)
             win.append(w)
             lose.append(l)
             draw.append(d)
-            plt.plot(win)
-            plt.plot(lose)
-            plt.plot(draw)
+            x = range(0, batch*(count + 1), batch)
+            plt.plot(x, win, label="P(win)")
+            plt.plot(x, draw, label="P(draw)")
+            plt.plot(x, lose, label="P(lose)")
+            plt.legend()
+            plt.title("Training vs Time")
+            plt.xlabel('Self-Play Games Played')
+            plt.ylabel('Probability')
             plt.pause(0.001)
             plt.clf()
 
             # train
-            train(e, 20)
+            train(e, batch)
             if (count % 100) == 99:
                 e.policy.save_weights(directory)
-
-"""
-e = Engine(optimal, 3)
-r = Engine(random, 1)
-win, lose, draw = 0, 0, 0
-for i in range(50):
-    score = self_play([e, r])
-    if score == 1:
-        win += 1
-    elif score == -1:
-        lose += 1
-    else:
-        draw += 1
-win, lose, draw
-"""
