@@ -103,9 +103,9 @@ if __name__ == "__main__":
             train(e, batch)
             if (count % 100) == 99:
                 e.policy.save_weights(directory)
-
+        
         e.policy.learningRate = 0.001
-        for count in range(1600):
+        for count2 in range(1600):
             # plot first before train
             w, l, d = 0, 0, 0
             for _ in range(testGamesNum):
@@ -131,7 +131,7 @@ if __name__ == "__main__":
             win.append(w)
             lose.append(l)
             draw.append(d)
-            x = range(0, batch*(count + 1), batch)
+            x = range(0, batch*(count + count2 + 2), batch)
             plt.plot(x, win, label="P(win)")
             plt.plot(x, draw, label="P(draw)")
             plt.plot(x, lose, label="P(lose)")
@@ -144,5 +144,5 @@ if __name__ == "__main__":
 
             # train
             train(e, batch)
-            if (count % 100) == 99:
+            if (count2 % 100) == 99:
                 e.policy.save_weights(directory)
