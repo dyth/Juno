@@ -28,7 +28,7 @@ class ValueNet(nn.Module):
         # three layers
         self.fc1 = nn.Linear(9, 128)
         self.fc2 = nn.Linear(128, 32)
-        self.fc3 = nn.Linear(32, 1)
+        self.fc3= nn.Linear(32, 1)
 
         # if cuda, use GPU
         self.gpu = False #torch.cuda.is_available()

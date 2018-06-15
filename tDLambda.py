@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import csv
 
 
-def create_train_sequence(engines):
+def create_train_sequence(engines, discount):
     'create a forest of nodes, their roots a new board position'
     board = initialBoard
     player = players[0]
@@ -36,7 +36,7 @@ def create_train_sequence(engines):
 
 def TD_Lambda(engines, network, discount):
     'return sequence of boards and reward for training'
-    trace = create_train_sequence(engines)
+    trace = create_train_sequence(engines, discount)
     boards = [t.board for t in trace]
     reward = trace[-1].reward
     network.temporal_difference(boards, reward, discount)

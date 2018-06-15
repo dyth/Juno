@@ -31,5 +31,6 @@ def make_graph(win, lose, draw, limit, batch):
     plt.show()
 
 
-win, lose, draw = read_file("tDLambda.csv")
-make_graph(win, lose, draw, len(win), 20)
+if __name__ == "__main__":
+    win, lose, draw = read_file("tDLambda.csv")
+    make_graph(win, lose, draw, len(win), 20)
