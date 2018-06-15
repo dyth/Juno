@@ -54,15 +54,16 @@ if __name__ == "__main__":
         
         plt.ion()
         batch = 20
-        learningRate = 0.01
-        discount = 0.7
+        learningRate = 0.005
+        discount = 1.0#0.7
         directory = "tDLambda"
         valueNetwork = ValueNet(learningRate, 0.7)
         e = Engine(valueNetwork, 3, discount)
         r = Engine(random, 1, discount)
         win, lose, draw = [], [], []
         testGamesNum = 10
-        for count in range(500):
+        count = 0
+        while True:
             # plot first before train
             w, l, d = 0, 0, 0
             for _ in range(testGamesNum):
@@ -103,6 +104,7 @@ if __name__ == "__main__":
             train(e, batch)
             if (count % 100) == 99:
                 e.policy.save_weights(directory)
+            count += 1
         
         e.policy.learningRate = 0.001
         for count2 in range(1600):
