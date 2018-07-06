@@ -15,7 +15,8 @@ def create_train_sequence(engines, discount):
     'create a forest of nodes, their roots a new board position'
     board = initialBoard
     player = players[0]
-    
+
+    # to explore, do a randomly chosen first move
     r = Engine(random, 1, discount)
     board = r.minimax(board, players[0])
     player = players[1]
