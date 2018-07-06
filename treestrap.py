@@ -16,18 +16,22 @@ def get_trace(node, trace):
     'return list of boards and reward of principle variation'
     trace.append(node.board)
     if node.pv is not None:
-        return get_leaf_pv(node.pv, trace)
+        return get_trace(node.pv, trace)
     else:
-        # if no reward, then need to remove final value
         return trace, node.reward
 
 
-def train_games(node, discount):
+def train_games(network, node, discount):
     'train on all possible games from node'
-    boards, reward = get_trace(node)
-    network.temporal_difference(boards, reward, discount)
+    boards, reward = get_trace(node, [])
+    # if no reward, then need to remove final value
+    if reward is None:
+        reward = network(boards[-1])
+        boards = boards[:-1]
+    if boards != []:
+        network.temporal_difference(boards, reward, discount)
     for board in node.other:
-        train_games(board, discount)
+        train_games(network, board, discount)
 
 
 def TreeStrap(engines, network, discount):
@@ -37,7 +41,7 @@ def TreeStrap(engines, network, discount):
     index = 0
     while evaluate(board) is None:
         node = engines[index].create_search_tree(board, player)
-        train_games(node, discount)
+        train_games(network, node, discount)
         board = node.pv.board
         player = next_player(player)
         index = int(not index)

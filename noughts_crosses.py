@@ -63,7 +63,7 @@ def evaluate(board):
         return float(board[2])
     elif None not in board:
         return 0.0
-    # if no valid moves, return None
+    # if valid moves, return None
     return None
 
 
